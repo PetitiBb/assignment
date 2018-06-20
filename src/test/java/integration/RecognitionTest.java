@@ -16,16 +16,16 @@ import static org.hamcrest.Matchers.equalTo;
 import static util.DataTest.FAILING_MSG;
 import static util.DataTest.HOST;
 import static util.DataTest.NOK_MSG;
+import static util.DataTest.PARAMS;
 import static util.DataTest.PATH_REC;
 import static util.DataTest.PATH_TRAIN;
-import static util.DataTest.params;
 import static util.DataTestLoader.readJsonFromFile;
 import static util.MockedApi.mockRecognitionEndpoint;
 import static util.MockedApi.mockTrainingEndpoint;
 
 
 @RunWith(DataProviderRunner.class)
-public class TrainingTest {
+public class RecognitionTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8085);
@@ -43,7 +43,7 @@ public class TrainingTest {
     public void shouldSucceedEnoughTrainingSentences(String fileName) throws IOException {
         //precondition: the food shouldn't be recognized already
         mockRecognitionEndpoint(400, NOK_MSG);
-        given().queryParams(params).get(HOST + PATH_REC)
+        given().queryParams(PARAMS).get(HOST + PATH_REC)
                 .then().statusCode(400);
 
         //get number of sentences & name of the food from the test case file
@@ -63,7 +63,7 @@ public class TrainingTest {
 
         //check final recognition
         mockRecognitionEndpoint(200, "{\"food\": \"soup\", \"position\": 10}");
-        given().queryParams(params).get(HOST + PATH_REC)
+        given().queryParams(PARAMS).get(HOST + PATH_REC)
                 .then().statusCode(200);
     }
 
@@ -71,7 +71,7 @@ public class TrainingTest {
     public void shouldFailNotEnoughTrainingSentences() throws IOException {
         //precondition: the food shouldn't be recognized already
         mockRecognitionEndpoint(400, NOK_MSG);
-        given().queryParams(params).get(HOST + PATH_REC)
+        given().queryParams(PARAMS).get(HOST + PATH_REC)
                 .then().statusCode(400);
 
         //mock training endpoint to reply with 405 when the input data is not enough
@@ -88,7 +88,7 @@ public class TrainingTest {
 
         //check the final recognition doesn't work
         mockRecognitionEndpoint(400, NOK_MSG);
-        given().queryParams(params).get(HOST + PATH_REC)
+        given().queryParams(PARAMS).get(HOST + PATH_REC)
                 .then().statusCode(400);
     }
 }

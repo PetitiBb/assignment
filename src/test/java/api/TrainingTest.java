@@ -10,10 +10,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static util.DataTest.HOST;
 import static util.DataTest.NOK_MSG;
 import static util.DataTest.PATH_REC;
-import static util.DataTest.params;
+import static util.DataTest.PARAMS;
 import static util.MockedApi.mockRecognitionEndpoint;
 
-public class RecognitionTest {
+public class TrainingTest {
 
 
     @Rule public WireMockRule wireMockRule = new WireMockRule(8085);
@@ -21,7 +21,7 @@ public class RecognitionTest {
     @Test
     public void shouldSucceedRecognition() {
         mockRecognitionEndpoint(200, "{\"food\": \"soup\", \"position\": 10}");
-        given().queryParams(params).when()
+        given().queryParams(PARAMS).when()
                 .get(HOST + PATH_REC)
                 .then()
                 .contentType(ContentType.JSON)
@@ -33,7 +33,7 @@ public class RecognitionTest {
     @Test
     public void shouldFailRecognition() {
         mockRecognitionEndpoint(400, NOK_MSG);
-        given().queryParams(params).when()
+        given().queryParams(PARAMS).when()
                 .get(HOST + PATH_REC)
                 .then()
                 .statusCode(400)
