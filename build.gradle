@@ -15,5 +15,20 @@ dependencies {
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
     testCompile group: 'com.tngtech.java', name: 'junit-dataprovider', version: '1.13.1'
     compile group: 'org.json', name: 'json', version: '20171018'
-    compile group: 'com.google.guava', name: 'guava', version: 'r05'
+    compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+test {
+    outputs.upToDateWhen { false }
+
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+        events "started", "passed", "skipped", "failed"
+    }
+
+    doLast {
+        println "Check the test report at file://$test.reports.html.destination/index.html"
+    }
 }
